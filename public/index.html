@@ -1,1 +1,90 @@
-Hola Mundo
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Game</title>
+
+<link rel="stylesheet" href="./libs/jquery-ui/jquery-ui.css" />
+<link rel="stylesheet" href="./libs/colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" href="./css/main.css" />
+<link rel="stylesheet" href="./css/threejsshadows.css" />
+
+<script src="./libs/jquery-3.3.1/jquery-3.3.1.js"></script>
+<script src="./libs/jquery-ui/jquery-ui.js"></script>
+
+<script src="./libs/three.js/three.js"></script>
+<script src="./libs/three.js/controls/OrbitControls.js"></script>
+<script src="./libs/colorpicker/js/colorpicker.js"></script>
+
+<script src="./libs/three.js/loaders/GLTFLoader.js"></script>
+
+<script src="./libs/three.js/loaders/inflate.min.js"></script>
+<script src="./libs/three.js/loaders/FBXLoader.js"></script>
+<script src="./libs/three.js/utils/cloneFBX.js"></script>
+
+<script src="./libs/tween.js/tween.js"></script>
+<script src="./libs/keyframe.js/keyframe.js"></script>
+
+<script src="./js/Multiple_animations.js"></script>
+
+<script type="text/javascript">
+
+
+function initControls()
+{
+    $("input[name=animation]").click(
+        function() {
+            var id = $("input[name=animation]:checked").attr('value');
+            changeAnimation(id);
+        }
+    );
+
+}
+
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(
+			function() {
+				// initialize the controls
+
+        document.addEventListener('mousedown', onDocumentMouseDown);
+
+        setInterval(createRobots, 1000);
+        setInterval(timer, 1000);
+
+        gameover();
+			}
+	);
+
+</script>
+
+</head>
+
+<body>
+
+  <style>
+    .menu: {
+      position:absolute;
+      left:20px;
+      top:20px;
+    }
+  </style>
+
+<div id="container">
+  <canvas id="webglcanvas"></canvas>
+  <div id="title">Score: 0</div>
+	<div id="prompt">Score: 0</div>
+  <div style="color: white;" id="animations">Time: 0 segs</div>
+</div>
+
+<div class="menu">
+  <button id="startGame" type="button" onclick="start()" name="button">Start Game</button>
+</div>
+
+
+
+</body>
+
+
+</html>
