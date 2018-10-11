@@ -246,7 +246,7 @@ function gameover(){
 
   if (level > 0) {
     if(score < (level * 10))
-      $('#startGame').text("Restart Game");
+      $('#startGame').text("Restart Level");
     else
       $('#startGame').text("Next Level");
   }
