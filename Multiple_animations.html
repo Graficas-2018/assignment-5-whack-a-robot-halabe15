@@ -70,7 +70,7 @@ function initControls()
 <body>
 
   <style>
-    .buttons: {
+    .menu: {
       position:absolute;
       left:20px;
       top:20px;
@@ -78,12 +78,13 @@ function initControls()
   </style>
 
 <div id="container">
-    <canvas id="webglcanvas"></canvas>
+  <canvas id="webglcanvas"></canvas>
 	<div id="title">Score: 0</div>
   <div style="color: white;" id="animations">Time: 0 segs</div>
-  <div class="buttons">
-    <button type="button" name="button">Start Game</button>
-  </div>
+</div>
+
+<div class="menu">
+  <button type="button" onclick="start()" name="button">Start Game</button>
 </div>
 
 
