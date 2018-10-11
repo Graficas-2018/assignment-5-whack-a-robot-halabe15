@@ -1,4 +1,4 @@
-var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048, TIME = 5;
+var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048, TIME = 11;
 
 var renderer = null,
 scene = null,
@@ -8,22 +8,20 @@ robot_idle = null,
 robot_attack = null,
 group = null,
 orbitControls = null,
-raycaster = null;
-
-var robot_run = null;
-var robot_running = {};
-var intersects = [];
-var deadAnimator;
-var mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
-var duration = 20000; // ms
-var currentTime = Date.now();
-var animation = "run";
-var score = 0;
-var time = TIME;
-var ambientLight = null;
-var mapUrl = "../images/grass.jpg";
-var game_over = false;
-
+raycaster = null,
+robot_run = null,
+robot_running = {},
+intersects = [],
+deadAnimator,
+mouse = new THREE.Vector2(), INTERSECTED, CLICKED,
+duration = 20000,
+currentTime = Date.now(),
+score = 0,
+time = TIME,
+ambientLight = null,
+mapUrl = "../images/grass.jpg",
+game_over = false,
+level = 0;
 
 function run() {
   if (!game_over) {
@@ -57,7 +55,7 @@ function animate() {
 
     for (var i in robot_running.children) {
       if (robot_running.children[i].die != true) {
-        robot_running.children[i].position.z += 0.3;
+        robot_running.children[i].position.z += level*(0.3);
       } else {
         if(!robot_running.children[i].deadAnimator.running)
           robot_running.remove(robot_running.children[i]);
@@ -93,7 +91,7 @@ function loadFBX(){
 }
 
 function createRobots(){
-  if (robot_running.children.length > 10)
+  if (robot_running.children.length > (level * 12))
     return;
   var object = cloneFbx(robot_idle);
   object.position.x = Math.random() * (45 + 45) - 45;
@@ -166,17 +164,13 @@ function createScene(canvas){
 
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(-15, 6, 30);
+    camera.position.set(0, 15, 150);
     scene.add(camera);
 
     orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
     // Create a group to hold all the objects
     root = new THREE.Object3D;
-
-
-    //
-    //
 
     ambientLight = new THREE.AmbientLight ( 0xffffff );
     root.add(ambientLight);
@@ -211,11 +205,8 @@ function createScene(canvas){
 
     // Now add the group to our scene
     scene.add( root );
-    setInterval(createRobots, 1000);
-    setInterval(timer, 1000);
 
     raycaster = new THREE.Raycaster();
-
 
 }
 
@@ -233,13 +224,12 @@ function onDocumentMouseDown(event){
 
     for (var i in intersects) {
       if ( intersects[i].length > 0 ){
-        CLICKED = intersects[i][0].object;
-        // robot_running.remove(robot_running[i]);
-        // createDeadAnimation(i);
-        // CLICKED.parent.remove(CLICKED);
-        CLICKED.parent.die = true;
-        createDeadAnimation(CLICKED.parent);
-        addScore(1);
+          CLICKED = intersects[i][0].object;
+        if (!CLICKED.parent.die) {
+          CLICKED.parent.die = true;
+          createDeadAnimation(CLICKED.parent);
+          addScore(1);
+        }
       } else
         CLICKED = null;
     }
@@ -252,40 +242,38 @@ function gameover(){
   game_over = true;
   $('#container').hide();
   $('#menu').show();
+  console.log(level);
+
+  if (level > 0) {
+    if(score < (level * 10))
+      $('#startGame').text("Restart Game");
+    else
+      $('#startGame').text("Next Level");
+  }
+
 }
 
 function start(){
   $('#menu').hide();
   $('#container').show();
 
+  var nextLevelBool = false;
+  if (level == 0 || score >= (level * 10)){
+    nextLevel();
+    nextLevelBool = true;
+  }
+
   time = TIME;
   addScore(-score);
   game_over = false;
 
-  renderer = null;
-  scene = null;
-  camera = null;
-  root = null;
-  robot_idle = null;
-  robot_attack = null;
-  group = null;
-  orbitControls = null;
-  raycaster = null;
+  var canvas = document.getElementById("webglcanvas");
+  // FullScreen
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  createScene(canvas, nextLevelBool);
 
-  robot_run = null;
-  robot_running = {};
-  intersects = [];
-  deadAnimator;
-  mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
-  duration = 20000; // ms
-  currentTime = Date.now();
-  animation = "run";
-  score = 0;
-  time = TIME;
-  ambientLight = null;
-  mapUrl = "../images/grass.jpg";
-  game_over = false;
-  createScene();
+  initControls();
 
   run();
 }
@@ -302,4 +290,9 @@ function timer(){
   if (time < 0)
     time = 0;
   $('#animations').text("Time: "+time+" segs");
+}
+
+function nextLevel(){
+  level++;
+  $('#prompt').text("Level: "+level+", Obj: "+level*10);
 }
