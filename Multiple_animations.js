@@ -1,4 +1,4 @@
-var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048, TIME = 11;
+var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048, TIME = 61;
 
 var renderer = null,
 scene = null,
