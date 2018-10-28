@@ -19,7 +19,7 @@ currentTime = Date.now(),
 score = 0,
 time = TIME,
 ambientLight = null,
-mapUrl = "../images/grass.jpg",
+mapUrl = "images/grass.jpg",
 game_over = false,
 level = 0;
 
@@ -69,7 +69,7 @@ function animate() {
 
 function loadFBX(){
     var loader = new THREE.FBXLoader();
-    loader.load( '../models/Robot/robot_run.fbx', function ( object )
+    loader.load( 'models/Robot/robot_run.fbx', function ( object )
     {
         robot_run = new THREE.AnimationMixer( scene );
         object.scale.set(0.01, 0.01, 0.01);
@@ -91,6 +91,8 @@ function loadFBX(){
 }
 
 function createRobots(){
+  if(!robot_running)
+    return;
   if (robot_running.children.length > (level * 12))
     return;
   var object = cloneFbx(robot_idle);
